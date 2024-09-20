@@ -1,0 +1,47 @@
+    {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 800,
+    "height": 450,
+    "title": "Student-Teacher Ratios by State in Australia, 2023",
+    "projection": {
+      "type": "mercator"
+    },
+    "data": {
+      "url": "https://raw.githubusercontent.com/huiiwen/FIT3179/main/Visualisation%202/georef-australia-state@public.json",
+      "format": {
+        "type": "topojson",
+        "feature": "georef-australia-state@public"
+      }
+    },
+    "transform": [
+      {
+        "lookup": "properties.ste_name",
+        "from": {
+          "data": {
+            "url": "https://raw.githubusercontent.com/huiiwen/FIT3179/main/Visualisation%202/Simplified_Student-teacher_ratio_dataset.csv",
+            "format": {"type": "csv"}
+          },
+          "key": "State or territory",
+          "fields": ["Student-teacher ratio"]
+        }
+      }
+    ],
+    "mark": "geoshape",
+    "encoding": {
+      "color": {
+        "field": "Student-teacher ratio",
+        "type": "quantitative",
+        "legend": {
+          "title": "Student-Teacher Ratio"
+        },
+        "scale": {
+          "scheme": "blues"
+        }
+      },
+      "tooltip": [
+        {"field": "properties.ste_name", "type": "nominal", "title": "State/territory"},
+        {"field": "Student-teacher ratio", "title": "Student-Teacher Ratio", "type": "quantitative"}
+      ]
+    }
+  }
+  
