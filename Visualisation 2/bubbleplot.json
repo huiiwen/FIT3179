@@ -9,7 +9,6 @@
     "transform": [
       {"filter": "datum.Students > 0"},
       {"filter": "State_selection == null || datum.State == State_selection"},
-      {"filter": "Nationality_selection == null || datum.Nationality == Nationality_selection"},
       {"filter": "datum.Students > Students_Above"}
     ],
     "params": [
@@ -42,24 +41,6 @@
         "name": "State or Territory Selection: "
         }
         },
-
-      {
-        "name": "Nationality_selection",
-        "bind": {
-          "input": "select",
-          "options": [
-            null, "Italy", "Thailand", "China", "Malaysia", "Philippines", "India", "Hong Kong", "France", "Brazil",
-            "Vietnam", "Indonesia", "United Kingdom", "Korea, Republic of (South)", "Singapore", "Japan", "Germany",
-            "Nepal", "United States of America", "Pakistan"
-          ],
-          "labels": [
-            "Show All", "Italy", "Thailand", "China", "Malaysia", "Philippines", "India", "Hong Kong", "France", "Brazil",
-            "Vietnam", "Indonesia", "United Kingdom", "Korea, Republic of (South)", "Singapore", "Japan", "Germany",
-            "Nepal", "United States of America", "Pakistan"
-          ],
-          "name": "Nationality Selection: "
-        }
-      },
       {
         "name": "Students_Above",
         "value": 0,
