@@ -1,0 +1,141 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 500,
+    "height": 350,
+    "title": "Growth of International Students by State or Territory (2002-2021)",
+    "data": {
+      "url": "https://raw.githubusercontent.com/huiiwen/FIT3179/refs/heads/main/Visualisation%202/international_students.csv"
+    },
+    "transform": [
+      {"filter": "datum.Students > 0"},
+      {"filter": "State_selection == null || datum.State == State_selection"},
+      {"filter": "Nationality_selection == null || datum.Nationality == Nationality_selection"},
+      {"filter": "datum.Students > Students_Above"}
+    ],
+    "params": [
+        {
+            "name": "State_selection",
+            "bind": {
+        "input": "select",
+        "options": [
+        null,
+        "ACT",
+            "QLD",
+            "TAS",
+            "NSW",
+            "NT",
+            "SA",
+            "VIC",
+            "WA"
+        ],
+        "labels":[
+        "Show All",
+        "ACT",
+            "QLD",
+            "TAS",
+            "NSW",
+            "NT",
+            "SA",
+            "VIC",
+            "WA"
+        ],
+        "name": "State or Territory Selection: "
+        }
+        },
+
+      {
+        "name": "Nationality_selection",
+        "bind": {
+          "input": "select",
+          "options": [
+            null, "Italy", "Thailand", "China", "Malaysia", "Philippines", "India", "Hong Kong", "France", "Brazil",
+            "Vietnam", "Indonesia", "United Kingdom", "Korea, Republic of (South)", "Singapore", "Japan", "Germany",
+            "Nepal", "United States of America", "Pakistan"
+          ],
+          "labels": [
+            "Show All", "Italy", "Thailand", "China", "Malaysia", "Philippines", "India", "Hong Kong", "France", "Brazil",
+            "Vietnam", "Indonesia", "United Kingdom", "Korea, Republic of (South)", "Singapore", "Japan", "Germany",
+            "Nepal", "United States of America", "Pakistan"
+          ],
+          "name": "Nationality Selection: "
+        }
+      },
+      {
+        "name": "Students_Above",
+        "value": 0,
+        "bind": {
+          "input": "range",
+          "min": 0,
+          "max": 300000,
+          "step": 10000,
+          "name": "Minimum Number of Students: "
+        }
+      }
+    ],
+    "layer": [
+      {
+        "mark": "circle",
+        "encoding": {
+          "x": {"field": "Year", "type": "ordinal", "title": "Year"},
+          "y": {"field": "Growth", "type": "quantitative", "axis": {"tickCount": 6}, "scale": {"domain": [-90, 2000]}, "title":"Growth Percentage of International Students"},
+          "color": {
+            "field": "State",
+            "type": "nominal",
+            "scale": {"domain": ["ACT", "QLD", "TAS", "NSW", "NT", "SA", "VIC", "WA"]}
+          },
+          "opacity": {
+
+            "value": 0.7
+          },
+          "size": {
+            "field": "Students",
+            "type": "quantitative",
+            "scale": {
+              "type": "threshold",
+              "domain": [0, 100, 1000, 10000, 100000, 300000],
+              "range": [10, 50, 100, 150, 200, 300, 400]
+            },
+            "legend": {"format": ".2s"}
+          },
+          "tooltip": [
+            {"field": "Year", "type": "ordinal"},
+            {"field": "State", "type": "nominal"},
+            {"field": "Nationality", "type": "nominal"},
+            {"field": "Growth", "type": "quantitative", "format": ","},
+            {"field": "Students", "type": "quantitative", "format": ","},
+            {"field": "Share", "type": "quantitative", "format": ","}
+          ]
+        }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "align": "right",
+          "baseline": "middle",
+          "dx": -12,
+          "fontSize": 11.5,
+          "fontStyle": "italic"
+        },
+        "encoding": {
+            "x": {"field": "Year", "type": "ordinal"},
+            "y": {"field": "Growth", "type": "quantitative"},
+          "text": {"field": "Growth", "type": "quantitative"},
+          "color": {"value": "black"},
+          "opacity": {
+            "condition": {"test": "datum.Growth == 1900", "value": 1},
+            "value": 0
+          }
+        ,
+        "tooltip": [
+            {"field": "Year", "type": "ordinal"},
+            {"field": "State", "type": "nominal"},
+            {"field": "Nationality", "type": "nominal"},
+            {"field": "Growth", "type": "quantitative", "format": ","},
+            {"field": "Students", "type": "quantitative", "format": ","},
+            {"field": "Share", "type": "quantitative", "format": ","}
+          ]
+        }
+      }
+    ]
+  }
+  
