@@ -1,12 +1,13 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": 500,
+    "width": 400,
     "height": 350,
-    "title": "Growth of International Students by State or Territory (2002-2021)",
+    "title": "Growth of International Students by State or Territory and Year (2002-2021)",
     "data": {
       "url": "https://raw.githubusercontent.com/huiiwen/FIT3179/refs/heads/main/Visualisation%202/international_students.csv"
     },
     "transform": [
+    {"filter": "datum.State == 'ACT' || datum.State == 'QLD' || datum.State == 'TAS' || datum.State == 'NSW' || datum.State == 'NT' || datum.State == 'SA' || datum.State == 'VIC' || datum.State == 'WA'"},
       {"filter": "datum.Students > 0"},
       {"filter": "State_selection == null || datum.State == State_selection"},
       {"filter": "datum.Students > Students_Above"}
