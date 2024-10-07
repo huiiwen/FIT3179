@@ -1,8 +1,9 @@
     {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "background": "#ebe3db",
     "width": 400,
     "height": 350,
-    "title": "Student-Teacher Ratios by State in Australia, 2023",
+
     "projection": {
       "type": "mercator"
     },
@@ -31,11 +32,12 @@
       "color": {
         "field": "Student-teacher ratio",
         "type": "quantitative",
+        "bin": {"maxbins": 5},
         "legend": {
           "title": "Student-Teacher Ratio"
         },
         "scale": {
-          "scheme": "blues"
+          "scheme": "browns"
         }
       },
       "tooltip": [

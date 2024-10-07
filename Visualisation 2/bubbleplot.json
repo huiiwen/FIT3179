@@ -1,8 +1,8 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "background": "#ebe3db",
     "width": 400,
     "height": 350,
-    "title": "Growth of International Students by State or Territory and Year (2002-2021)",
     "data": {
       "url": "https://raw.githubusercontent.com/huiiwen/FIT3179/refs/heads/main/Visualisation%202/international_students.csv"
     },
@@ -10,6 +10,7 @@
     {"filter": "datum.State == 'ACT' || datum.State == 'QLD' || datum.State == 'TAS' || datum.State == 'NSW' || datum.State == 'NT' || datum.State == 'SA' || datum.State == 'VIC' || datum.State == 'WA'"},
       {"filter": "datum.Students > 0"},
       {"filter": "State_selection == null || datum.State == State_selection"},
+      {"filter": "Nationality_selection == null || datum.Nationality == Nationality_selection"},
       {"filter": "datum.Students > Students_Above"}
     ],
     "params": [
@@ -41,6 +42,23 @@
         ],
         "name": "State or Territory Selection: "
         }
+        },
+        {
+          "name": "Nationality_selection",
+          "bind": {
+            "input": "select",
+            "options": [
+              null, "Italy", "Thailand", "China", "Malaysia", "Philippines", "India", "Hong Kong", "France", "Brazil",
+              "Vietnam", "Indonesia", "United Kingdom", "Korea, Republic of (South)", "Singapore", "Japan", "Germany",
+              "Nepal", "United States of America", "Pakistan"
+            ],
+            "labels": [
+              "Show All", "Italy", "Thailand", "China", "Malaysia", "Philippines", "India", "Hong Kong", "France", "Brazil",
+              "Vietnam", "Indonesia", "United Kingdom", "Korea, Republic of (South)", "Singapore", "Japan", "Germany",
+              "Nepal", "United States of America", "Pakistan"
+            ],
+            "name": "Nationality Selection: "
+          }
         },
       {
         "name": "Students_Above",

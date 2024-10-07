@@ -1,0 +1,108 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "background": "#ebe3db",
+    "width": 390,
+    "height": 350,
+    "data": {
+      "url": "https://raw.githubusercontent.com/huiiwen/FIT3179/refs/heads/main/Visualisation%202/School_finance_cleaned.csv",
+      "format": {"type": "csv"}
+    },
+    "params": [
+      {
+        "name": "viewSelector",
+        "value": "Total Income",
+        "bind": {
+          "input": "select",
+          "options": ["Total Income", "Income per Student"],
+          "name": "Select view: "
+        }
+      }
+    ],
+    "transform": [
+        {
+        "filter": "datum['State/territory'] != 'Australia'"
+        },
+        {
+            "filter": "datum['School sector'] == 'All'"
+        },
+        {
+            "filter": "datum['School level'] == 'All'"
+        },
+        {
+            "filter": "datum['Geolocation'] == 'All'"
+        },
+        {
+            "filter": "datum['Income/expenditure item'] == 'Total gross income'"
+        }
+    ],
+    "layer": [
+      {
+        "mark": {"type": "area", "interpolate": "monotone"},
+        "encoding": {
+          "x": {
+            "field": "Calendar year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          "y": {
+            "aggregate": "sum",
+            "field": "Total income",
+            "type": "quantitative",
+            "title": "Total Income (Millions of AUD)",
+            "scale": {"domain": [0, 100000]} 
+          },
+          "color": {
+            "field": "State/territory",
+            "type": "nominal",
+            "title": "State"
+          },
+          "opacity": {
+            "condition": {
+              "test": "viewSelector === 'Total Income'",
+              "value": 1
+            },
+            "value": 0
+          },
+          "tooltip": [
+            {"field": "Calendar year", "type": "ordinal"},
+            {"field": "State/territory", "type": "nominal"},
+            {"field": "Total income", "type": "quantitative", "title": "Total Income (Millions)"}
+          ]
+        }
+      },
+      {
+        "mark": {"type": "line", "point": true, "interpolate": "monotone"},
+        "encoding": {
+          "x": {
+            "field": "Calendar year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          "y": {
+            "aggregate": "mean",
+            "field": "Income per student",
+            "type": "quantitative",
+            "title": "Income per Student (AUD)"
+          },
+          "color": {
+            "field": "State/territory",
+            "type": "nominal",
+            "title": "State"
+          },
+          "opacity": {
+            "condition": {
+              "test": "viewSelector === 'Income per Student'",
+              "value": 1
+            },
+            "value": 0
+          },
+          "tooltip": [
+            {"field": "Calendar year", "type": "ordinal"},
+            {"field": "State/territory", "type": "nominal"},
+            {"field": "Income per student", "type": "quantitative", "title": "Income per Student (AUD)"}
+          ]
+        }
+      }
+    ]
+  }
+  
