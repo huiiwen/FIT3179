@@ -29,8 +29,16 @@ h1 {
     font-weight: 900;
 }
 
+b {
+    color: #d4af37;
+}
+
 body {
     background-color: lightgray;
+}
+
+p {
+    font-size: 0.5;
 }
 
 .page {
@@ -48,6 +56,12 @@ body {
 .description h2 {
     margin-top: 0px;
     color: #654f43;
+    font-family: 'Merriweather', serif;
+    font-size: 25px;
+}
+
+.description b {
+    color: #eb7f45;
 }
 
 .description-right {
@@ -63,5 +77,5 @@ body {
 }
 
 .small-font {
-    font-size: 14px;
+    font-size: 13px;
 }
