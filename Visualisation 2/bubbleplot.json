@@ -10,8 +10,8 @@
     {"filter": "datum.State == 'ACT' || datum.State == 'QLD' || datum.State == 'TAS' || datum.State == 'NSW' || datum.State == 'NT' || datum.State == 'SA' || datum.State == 'VIC' || datum.State == 'WA'"},
       {"filter": "datum.Students > 0"},
       {"filter": "State_selection == null || datum.State == State_selection"},
-      {"filter": "Nationality_selection == null || datum.Nationality == Nationality_selection"},
-      {"filter": "datum.Students > Students_Above"}
+      {"filter": "datum.Nationality != '_All'"},
+      {"filter": "Nationality_selection == null || datum.Nationality == Nationality_selection"}
     ],
     "params": [
         {
@@ -59,18 +59,7 @@
             ],
             "name": "Nationality Selection: "
           }
-        },
-      {
-        "name": "Students_Above",
-        "value": 0,
-        "bind": {
-          "input": "range",
-          "min": 0,
-          "max": 300000,
-          "step": 10000,
-          "name": "Minimum Number of Students: "
         }
-      }
     ],
     "layer": [
       {
@@ -102,40 +91,36 @@
             {"field": "State", "type": "nominal"},
             {"field": "Nationality", "type": "nominal"},
             {"field": "Growth", "type": "quantitative", "format": ","},
-            {"field": "Students", "type": "quantitative", "format": ","},
-            {"field": "Share", "type": "quantitative", "format": ","}
+            {"field": "Students", "type": "quantitative", "format": ","}
           ]
         }
       },
       {
+        "transform": [
+          {
+            "window": [{"op": "rank", "as": "ranking"}],
+            "sort": [{"field": "Growth", "order": "descending"}]
+          },
+          {"filter": "datum.Growth == 1900"},
+          {
+            "calculate": "'Highest Growth: ' + datum.Growth + ' of ' + datum.Nationality",
+            "as": "text_annotation"
+          }
+        ],
         "mark": {
           "type": "text",
           "align": "right",
           "baseline": "middle",
-          "dx": -12,
+          "dx": -6,
           "fontSize": 11.5,
-          "fontStyle": "italic"
+          "fontStyle": "italic",
+          "color": "darkred"
         },
         "encoding": {
-            "x": {"field": "Year", "type": "ordinal"},
-            "y": {"field": "Growth", "type": "quantitative"},
-          "text": {"field": "Growth", "type": "quantitative"},
-          "color": {"value": "black"},
-          "opacity": {
-            "condition": {"test": "datum.Growth == 1900", "value": 1},
-            "value": 0
-          }
-        ,
-        "tooltip": [
-            {"field": "Year", "type": "ordinal"},
-            {"field": "State", "type": "nominal"},
-            {"field": "Nationality", "type": "nominal"},
-            {"field": "Growth", "type": "quantitative", "format": ","},
-            {"field": "Students", "type": "quantitative", "format": ","},
-            {"field": "Share", "type": "quantitative", "format": ","}
-          ]
+          "x": {"field": "Year", "type": "ordinal"},
+          "y": {"field": "Growth", "type": "quantitative"},
+          "text": {"field": "text_annotation"}
         }
       }
     ]
   }
-  

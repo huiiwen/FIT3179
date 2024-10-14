@@ -1,0 +1,124 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "background": "#ebe3db",
+    "data": {
+      "url": "https://raw.githubusercontent.com/huiiwen/FIT3179/main/Visualisation%202/Student_attendance_dataset_cleaned.csv",
+      "format": {"type": "csv"}
+    },
+    "transform": [
+    {
+      "calculate": "datum['State/Territory'] === 'New South Wales' ? 'NSW' : datum['State/Territory'] === 'Victoria' ? 'VIC' : datum['State/Territory'] === 'Queensland' ? 'QLD' : datum['State/Territory'] === 'South Australia' ? 'SA' : datum['State/Territory'] === 'Western Australia' ? 'WA' : datum['State/Territory'] === 'Tasmania' ? 'TAS' : datum['State/Territory'] === 'Northern Territory' ? 'NT' : datum['State/Territory'] === 'Australian Capital Territory' ? 'ACT' : datum['State/Territory']",
+      "as": "StateAbbreviation"
+    }
+  ],
+    "vconcat": [
+      {
+        "width": 400,
+        "height": 300,
+        "transform": [
+          {"filter": {"param": "time_brush"}}
+        ],
+        "mark": "rect",
+        "encoding": {
+          "x": {
+            "field": "Calendar year",
+            "type": "temporal",
+            "title": "Year",
+            "timeUnit": "year",
+            "axis": {"grid": false, "tickCount": "year"}
+          },
+          "y": {
+            "field": "StateAbbreviation",
+            "type": "nominal",
+            "title": "State/Territory",
+            "sort": "-x"
+          },
+          "color": {
+            "field": "Attendance Rate",
+            "type": "quantitative",
+            "title": "Attendance Rate",
+            "scale": {"scheme": "browns"}
+          },
+          "tooltip": [
+            {"field": "State/Territory", "type": "nominal", "title": "State"},
+            {"field": "Calendar year", "type": "temporal", "title": "Year", "timeUnit": "year"},
+            {"field": "Attendance Rate", "type": "quantitative"}
+          ]
+        }
+      },
+      {
+        "width": 500,
+        "height": 60,
+        "mark": "line",
+        "title": "Time-Based Filter for Attendance Data",
+        "params": [
+          {
+            "name": "time_brush",
+            "select": {"type": "interval", "encodings": ["x"]}
+          }
+        ],
+        "encoding": {
+          "x": {"field": "Calendar year", "type": "temporal", "title": ""},
+          "y": {"field": "Attendance Rate", "type": "quantitative", "title": "Rate"}
+        }
+      },
+      {
+        "width": 500,
+        "transform": [
+          {"filter": {"param": "time_brush"}}
+        ],
+        "mark": "line",
+        "encoding": {
+          "x": {
+            "field": "Calendar year", 
+            "type": "temporal", 
+            "timeUnit": "year", 
+            "title": "Year",
+            "scale": {"domain": {"param": "time_brush"}},
+            "axis": {"title": "", "grid": false, "tickCount": "year"}
+          },
+          "y": {"field": "Attendance Rate", "type": "quantitative"},
+          "color": {
+            "field": "StateAbbreviation",
+            "type": "nominal",
+            "legend": {"orient": "bottom", "direction": "horizontal", "title": "State/Territory", "columns": 4}
+          },
+          "tooltip": [
+                {"field": "Calendar year", "type": "temporal", "timeUnit": "year", "title": "Year"},
+                {"field": "StateAbbreviation", "type": "nominal", "title": "State"},
+                {"field": "Attendance Rate", "type": "quantitative"}
+              ]
+        }
+      },
+      {
+        "transform": [
+          {
+            "window": [{"op": "rank", "as": "ranking"}],
+            "sort": [{"field": "Attendance Rate", "order": "ascending"}]
+          },
+          {"filter": "datum.ranking == 1"},
+          {
+            "calculate": "'Lowest Attendance Rate: ' + format(datum['Attendance Rate'], '.2f') + '% in ' + datum['State/Territory']",
+            "as": "text_annotation"
+          }
+        ],
+        "mark": {
+          "type": "text",
+          "align": "left",
+          "baseline": "middle",
+          "dx": 100,
+          "dy": 0,
+          "fontSize": 11,
+          "fontStyle": "italic",
+          "color": "darkred"
+        },
+        "encoding": {
+          "text": {"field": "text_annotation"}
+        }
+      }
+    
+  
+],
+"config": {"title": {"font": "sans-serif", "fontSize": 14}}
+}
+  

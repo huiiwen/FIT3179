@@ -66,7 +66,7 @@
           "tooltip": [
             {"field": "Calendar year", "type": "ordinal"},
             {"field": "State/territory", "type": "nominal"},
-            {"field": "Total income", "type": "quantitative", "title": "Total Income (Millions)"}
+            {"field": "Total income", "type": "quantitative", "title": "Total Income (Millions)", "format":".2f"}
           ]
         }
       },
@@ -102,7 +102,38 @@
             {"field": "Income per student", "type": "quantitative", "title": "Income per Student (AUD)"}
           ]
         }
+      },
+      {
+        "transform": [
+          {
+            "window": [{"op": "rank", "as": "ranking"}],
+            "sort": [
+              {"field": "Total income", "order": "descending"},
+              {"field": "Income per student", "order": "descending"}
+            ],
+            "groupby": [{"field": "viewSelector"}]
+          },
+          {
+            "filter": "(viewSelector === 'Total Income' && datum['ranking'] == 1) || (viewSelector === 'Income per Student' && datum['ranking'] == 1)"
+          },
+          {
+            "calculate": "viewSelector === 'Total Income' ? 'Highest Total Income: ' + format(datum['Total income'], '.2f') + 'M AUD in ' + datum['State/territory'] + ', ' + datum['Calendar year']: 'Highest Income per Student: ' + datum['Income per student'] + ' AUD in ' + datum['State/territory'] + ', ' + datum['Calendar year']",
+            "as": "text_annotation"
+          }
+        ],
+        "mark": {
+          "type": "text",
+          "align": "left",
+          "baseline": "middle",
+          "dx": 0,
+          "dy": 0,
+          "fontSize": 11,
+          "fontStyle": "italic",
+          "color": "darkred"
+        },
+        "encoding": {
+          "text": {"field": "text_annotation"}
+        }
       }
     ]
   }
-  
