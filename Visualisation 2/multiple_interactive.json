@@ -12,6 +12,24 @@
     }
   ],
     "vconcat": [
+        {
+            "mark": {
+              "type": "text",
+              "align": "left",
+              "baseline": "top",
+              "dx": 100,
+              "dy": 0,
+              "fontSize": 11,
+              "fontStyle": "italic",
+              "color": "red"
+            },
+            "encoding": {
+              "text": {
+                "value": "2020 data unavailable due to COVID-19 inconsistencies."
+              }
+            }
+          
+      },
       {
         "width": 400,
         "height": 300,
@@ -40,12 +58,11 @@
             "scale": {"scheme": "browns"}
           },
           "tooltip": [
-            {"field": "State/Territory", "type": "nominal", "title": "State"},
+            {"field": "StateAbbreviation", "type": "nominal", "title": "State"},
             {"field": "Calendar year", "type": "temporal", "title": "Year", "timeUnit": "year"},
             {"field": "Attendance Rate", "type": "quantitative"}
           ]
-        }
-      },
+        }},
       {
         "width": 500,
         "height": 60,
@@ -119,6 +136,7 @@
     
   
 ],
+
 "config": {"title": {"font": "sans-serif", "fontSize": 14}}
 }
   

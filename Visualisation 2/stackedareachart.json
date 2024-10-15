@@ -33,6 +33,14 @@
         },
         {
             "filter": "datum['Income/expenditure item'] == 'Total gross income'"
+        },
+        {
+          "calculate": "datum['State/territory'] === 'New South Wales' ? 'NSW' : datum['State/territory'] === 'Victoria' ? 'VIC' : datum['State/territory'] === 'Queensland' ? 'QLD' : datum['State/territory'] === 'South Australia' ? 'SA' : datum['State/territory'] === 'Western Australia' ? 'WA' : datum['State/territory'] === 'Tasmania' ? 'TAS' : datum['State/territory'] === 'Northern Territory' ? 'NT' : datum['State/territory'] === 'Australian Capital Territory' ? 'ACT' : datum['State/territory']",
+          "as": "StateAbbreviation"
+        },
+        {
+          "calculate": "viewSelector === 'Total Income' ? datum['Total income'] : datum['Income per student']",
+          "as": "selected_metric"
         }
     ],
     "layer": [
@@ -52,7 +60,7 @@
             "scale": {"domain": [0, 100000]} 
           },
           "color": {
-            "field": "State/territory",
+            "field": "StateAbbreviation",
             "type": "nominal",
             "title": "State"
           },
@@ -65,7 +73,7 @@
           },
           "tooltip": [
             {"field": "Calendar year", "type": "ordinal"},
-            {"field": "State/territory", "type": "nominal"},
+            {"field": "StateAbbreviation", "type": "nominal"},
             {"field": "Total income", "type": "quantitative", "title": "Total Income (Millions)", "format":".2f"}
           ]
         }
@@ -85,7 +93,7 @@
             "title": "Income per Student (AUD)"
           },
           "color": {
-            "field": "State/territory",
+            "field": "StateAbbreviation",
             "type": "nominal",
             "title": "State"
           },
@@ -98,7 +106,7 @@
           },
           "tooltip": [
             {"field": "Calendar year", "type": "ordinal"},
-            {"field": "State/territory", "type": "nominal"},
+            {"field": "StateAbbreviation", "type": "nominal"},
             {"field": "Income per student", "type": "quantitative", "title": "Income per Student (AUD)"}
           ]
         }
@@ -107,17 +115,11 @@
         "transform": [
           {
             "window": [{"op": "rank", "as": "ranking"}],
-            "sort": [
-              {"field": "Total income", "order": "descending"},
-              {"field": "Income per student", "order": "descending"}
-            ],
-            "groupby": [{"field": "viewSelector"}]
-          },
+            "sort": [{"field": "selected_metric", "order": "descending"}]
+        },
+        {"filter": "datum.ranking == 1"},
           {
-            "filter": "(viewSelector === 'Total Income' && datum['ranking'] == 1) || (viewSelector === 'Income per Student' && datum['ranking'] == 1)"
-          },
-          {
-            "calculate": "viewSelector === 'Total Income' ? 'Highest Total Income: ' + format(datum['Total income'], '.2f') + 'M AUD in ' + datum['State/territory'] + ', ' + datum['Calendar year']: 'Highest Income per Student: ' + datum['Income per student'] + ' AUD in ' + datum['State/territory'] + ', ' + datum['Calendar year']",
+            "calculate": "viewSelector === 'Total Income' ? 'Highest Total Income: ' + format(datum['Total income'], '.2f') + 'M AUD in ' + datum['StateAbbreviation'] + ', ' + datum['Calendar year']: 'Highest Income per Student: ' + datum['Income per student'] + ' AUD in ' + datum['StateAbbreviation'] + ', ' + datum['Calendar year']",
             "as": "text_annotation"
           }
         ],
@@ -125,7 +127,7 @@
           "type": "text",
           "align": "left",
           "baseline": "middle",
-          "dx": 0,
+          "dx": -30,
           "dy": 0,
           "fontSize": 11,
           "fontStyle": "italic",
